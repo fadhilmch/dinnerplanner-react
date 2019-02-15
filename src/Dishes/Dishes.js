@@ -47,7 +47,7 @@ class Dishes extends Component {
         break;
       case "LOADED":
         dishesList = this.state.dishes.map(dish => (        
-          <div key ={dish.id}id={dish.id} className="col-sm-6 col-md-3 col-lg-2">
+          <div key ={dish.id} id={dish.id} className="col-sm-6 col-md-3 col-lg-2 padding-top">
                 <div className="card">
                     <div className='card-img-top'>
                       <div className='image-wrapper'>
@@ -69,7 +69,9 @@ class Dishes extends Component {
 
     return (
       <div className="Dishes">
+        <div className='row'>
         {dishesList}
+        </div>
       </div>
     );
   }
