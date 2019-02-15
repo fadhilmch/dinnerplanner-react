@@ -12,4 +12,9 @@ body {
     min-height: 100%;
 }
 
-
+@media (max-width: 767.98px) {
+    .SelectDish {
+        margin-left: 0px;
+        padding-top: 100px;
+    }
+}
