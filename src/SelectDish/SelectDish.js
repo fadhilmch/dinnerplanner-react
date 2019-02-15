@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Sidebar from "../Sidebar/Sidebar";
 import Dishes from "../Dishes/Dishes";
 import "./SelectDish.css";
+import { Link } from "react-router-dom";
 
 class SelectDish extends Component {
   render() {
@@ -26,7 +27,10 @@ class SelectDish extends Component {
                 </div>
               </div>
           </div>  
+           <Link to="/detail">
             <Dishes />
+          </Link>
+          
         </div>
 
       

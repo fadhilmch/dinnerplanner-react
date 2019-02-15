@@ -46,20 +46,20 @@ class Dishes extends Component {
         dishesList = <em>Loading...</em>;
         break;
       case "LOADED":
-
-        dishesList = this.state.dishes.map(dish => (
-        <div key ={dish.id} id='menu-wrapper' className="row center">                
-          <div id={dish.id} className="col-sm-6 col-md-3 col-lg-2">
+        dishesList = this.state.dishes.map(dish => (        
+          <div key ={dish.id}id={dish.id} className="col-sm-6 col-md-3 col-lg-2">
                 <div className="card">
-                    <div className='card-img-top' className='image-wrapper'>
-                      <img src={'https://spoonacular.com/recipeImages/'+ dish.image}  /> 
+                    <div className='card-img-top'>
+                      <div className='image-wrapper'>
+                        <img src={'https://spoonacular.com/recipeImages/'+ dish.image}  /> 
+                      </div>
                     </div>
                     <div className="card-text" >
                         <p>{dish.title} </p>
                     </div>
                 </div> 
           </div>
-        </div>
+      
         ));
         break;
       default:
