@@ -23,19 +23,3 @@
 }
 
 
-
-#sidebar {
-    height: 100%;
-    width: 260px;
-    /* Set the width of the sidebar */
-    position: fixed;
-    /* Fixed Sidebar (stay in place on scroll) */
-    z-index: 1;
-    /* Stay on top */
-
-    overflow-x: hidden;
-    padding-top: 100px
-    /* Disable horizontal scroll */
-    /* padding-top: 20px; */
-}
-

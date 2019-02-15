@@ -1,3 +1,30 @@
 .Sidebar {
 	width: 300px;	
 }
+
+#sidebar {
+	height: 100%;
+	width: 260px;
+	/* Set the width of the sidebar */
+	position: fixed;
+	/* Fixed Sidebar (stay in place on scroll) */
+	z-index: 1;
+	/* Stay on top */
+
+	overflow-x: hidden;
+	padding-top: 170px;
+	/* Disable horizontal scroll */
+}
+
+#sidebar .pad-left {
+	padding-left: 20px;
+}
+
+.table-wrapper {
+	width: 100%;
+	margin-top: 10px;
+}
+
+#dinner-nav {
+	margin-top: 80px;
+}

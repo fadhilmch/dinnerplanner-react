@@ -79,8 +79,8 @@ class Sidebar extends Component {
                     </div>
                     <div id='sidebar' className='d-none d-md-block center border-right'>
                         <div className='padding-15'>
-                            <h4 className="left">My Dinner</h4>
-                            <div>
+                            <h4 className="left pad-left">My Dinner</h4>
+                            <div className='pad-left'>
                                 <form className="form-inline">
                                     <div className="form-group">
                                         <span className='margin-right-5px'>People </span>
