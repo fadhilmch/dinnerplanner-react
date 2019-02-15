@@ -5,6 +5,17 @@ import "./SelectDish.css";
 import { Link } from "react-router-dom";
 
 class SelectDish extends Component {
+
+  constructor(props) {
+    super(props);
+    // We create the state to store the various statuses
+    // e.g. API data loading or error
+    console.log(props)
+    this.state = {
+      id: 'id'
+    };
+  }
+
   render() {
     return (
       <div>
@@ -27,8 +38,8 @@ class SelectDish extends Component {
                 </div>
               </div>
           </div>  
-           <Link to="/detail">
-            <Dishes />
+           <Link to="/detail" >
+            <Dishes/>
           </Link>
           
         </div>
