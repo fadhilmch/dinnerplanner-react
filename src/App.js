@@ -15,9 +15,16 @@ class App extends Component {
 
   render() {
     return (
+      <div>
+      <div>
+        <nav class="navbar mx-auto fixed title">
+            <h1 class='mx-auto'>Dinner Planner</h1>
+        </nav>
+
+      </div>
       <div className="App">
         <header className="App-header">
-          <h1 className="App-title">{this.state.title}</h1>
+          <h1 className="title">{this.state.title}</h1>
 
           {/* We rended diffrent component based on the path */}
           <Route exact path="/" component={Welcome} />
@@ -26,6 +33,7 @@ class App extends Component {
             render={() => <SelectDish model={modelInstance} />}
           />
         </header>
+      </div>
       </div>
     );
   }
