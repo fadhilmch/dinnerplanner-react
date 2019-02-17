@@ -5,6 +5,12 @@ import "./SelectDish.css";
 import { Link } from "react-router-dom";
 
 class SelectDish extends Component {
+  consturctor() {
+    this.state = {
+      arrDishes2 : ['appetizer', 'breakfast', 'dessert','dinner', 'drink', 'lunch' , 'main course', 'main dish','sauce', 'side dish',  'snack']
+    };
+  };
+  
   render() {
     return (
       <div>
@@ -19,6 +25,9 @@ class SelectDish extends Component {
               </div>
               <div className="col-lg-2 col-md-4">
                 <select className="form-control btn btn-primary full-width text-left" id="dishType">
+                  {
+                    
+                  }
                 </select>
               </div>
               <div className="col-lg-1 col-md-2">
