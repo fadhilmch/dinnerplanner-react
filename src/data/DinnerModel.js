@@ -13,18 +13,32 @@ class DinnerModel extends ObservableModel {
     this.getCurrentDish();
     this.currentDish = 0;
     this.selectedDish = 0;
+    this.searchQuery = { 'type': 'all', 'query': '' };
   }
 
-getCurrentDish(){
-  console.log('ini id get: '+this.currentDish)
-  return this.currentDish;
-}
+  getSearchQuery = () => {
+    return this.searchQuery;
+  };
 
-setCurrentDish(id){
-  this.currentDish = id;
-  console.log('Ini id: '+ this.currentDish)
-  this.notifyObservers();
-}
+  setSearchQuery = (query) => {
+    if (query) {
+        this.searchQuery = { 'type': query.type, 'query': query.query };
+        // this.searchQuery.notifyObserver({ 'type': query.type, 'query': query.query });
+    } else {
+        this.searchQuery = { 'type': 'all', 'query': '' };
+        // this.searchQuery.notifyObserver({ 'type': 'all', 'query': '' });
+    };
+  };
+
+  getCurrentDish(){
+    return this.currentDish;
+  }
+
+  setCurrentDish(id){
+    this.currentDish = id;
+    console.log('Ini id: '+ this.currentDish)
+    this.notifyObservers();
+  }
 
   /**
    * Get the number of guests

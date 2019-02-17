@@ -5,14 +5,15 @@ import "./SelectDish.css";
 import { Link } from "react-router-dom";
 
 class SelectDish extends Component {
-  consturctor() {
+  constructor(props) {
+    super(props);
     this.state = {
       arrDishes : ['appetizer', 'breakfast', 'dessert','dinner', 'drink', 'lunch' , 'main course', 'main dish','sauce', 'side dish',  'snack']
     };
   };
 
   checkSelected = (type) => {
-    return (type.toLowerCase()===model.getSearchQuery().type)?'selected':''
+    return (type.toLowerCase()=== this.props.model.getSearchQuery().type)?'selected':''
   };
 
   render() {
@@ -30,8 +31,8 @@ class SelectDish extends Component {
               <div className="col-lg-2 col-md-4">
                 <select className="form-control btn btn-primary full-width text-left" id="dishType">
                   {
-                    this.state.arrDishes.map(type => (
-                      <option {...this.checkSelected(type)}>{arrDishes2[i]} </option>
+                    this.state.arrDishes.map((type,i) => (
+                      <option key={i} {...this.checkSelected(type)}>{type} </option>
                     ))
                   }
                 </select>
