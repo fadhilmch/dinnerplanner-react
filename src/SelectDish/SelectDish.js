@@ -3,29 +3,18 @@ import Sidebar from "../Sidebar/Sidebar";
 import Dishes from "../Dishes/Dishes";
 import "./SelectDish.css";
 import { Link } from "react-router-dom";
-import Detail from "../Detail/Detail";
 
 class SelectDish extends Component {
-<<<<<<< HEAD
   consturctor() {
     this.state = {
-      arrDishes2 : ['appetizer', 'breakfast', 'dessert','dinner', 'drink', 'lunch' , 'main course', 'main dish','sauce', 'side dish',  'snack']
+      arrDishes : ['appetizer', 'breakfast', 'dessert','dinner', 'drink', 'lunch' , 'main course', 'main dish','sauce', 'side dish',  'snack']
     };
   };
-  
-=======
 
-  constructor(props) {
-    super(props);
-    // We create the state to store the various statuses
-    // e.g. API data loading or error
-    console.log(props)
-    this.state = {
-      
-    };
-  }
+  checkSelected = (type) => {
+    return (type.toLowerCase()===model.getSearchQuery().type)?'selected':''
+  };
 
->>>>>>> ee9faacf14497fe99cb85f4ea952ac9dc7fdda5a
   render() {
     return (
       <div>
@@ -41,7 +30,9 @@ class SelectDish extends Component {
               <div className="col-lg-2 col-md-4">
                 <select className="form-control btn btn-primary full-width text-left" id="dishType">
                   {
-                    
+                    this.state.arrDishes.map(type => (
+                      <option {...this.checkSelected(type)}>{arrDishes2[i]} </option>
+                    ))
                   }
                 </select>
               </div>
@@ -51,8 +42,10 @@ class SelectDish extends Component {
                 </div>
               </div>
           </div>  
+           <Link to="/detail">
+            <Dishes />
+          </Link>
           
-           <Dishes model={this.props.model}/>
         </div>
 
       
