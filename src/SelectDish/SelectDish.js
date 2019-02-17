@@ -13,15 +13,15 @@ class SelectDish extends Component {
   };
 
   checkSelected = (type) => {
-    return (type.toLowerCase()=== this.props.model.getSearchQuery().type)?'selected':''
+    return (type.toLowerCase()=== this.props.model.getSearchQuery().type)?'selected':'';
   };
 
   render() {
-    return (
+    let dishType = null;
+
+      <Sidebar model={this.props.model} />
+      dishType = this.state.type.map(type => (
       <div>
-    
-        <Sidebar model={this.props.model} />
-        
         <div className="SelectDish">
           <h3>Find a Dish</h3>
           <div className="row">
@@ -41,18 +41,18 @@ class SelectDish extends Component {
                 <div>
                   <button id='search-btn' type="button" className="btn btn-warning">Search</button>
                 </div>
-              </div>
-          </div>  
-           <Link to="/detail">
-            <Dishes />
-          </Link>
-          
+            </div>  
+             <Dishes model={this.props.model}/>
+          </div>
         </div>
+      ));
+
+    return (
+      dishType
+  );
 
       
-
-      </div>
-    );
+  
   }
 }
 

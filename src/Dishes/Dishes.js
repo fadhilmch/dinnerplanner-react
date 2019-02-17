@@ -40,9 +40,6 @@ class Dishes extends Component {
       });
   }
 
-  
-
-
   render() {
     let dishesList = null;
     console.log(this.props)

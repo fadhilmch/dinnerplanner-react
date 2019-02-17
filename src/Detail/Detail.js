@@ -7,19 +7,17 @@ import modelInstance from "../data/DinnerModel";
 class Detail extends Component {
     constructor(props) {
         super(props);
-        console.log(this.props);
-        console.log(this.props);
         // We create the state to store the various statuses
         // e.g. API data loading or error
         this.state = {
             status: "LOADING",
-             id : this.props.model.getCurrentDish()
+            id: this.props.model.getCurrentDish()
 
         };
     }
 
     componentDidMount() {
-      
+
         modelInstance
             .getDish(this.state.id)
             .then(dishes => {
@@ -47,12 +45,13 @@ class Detail extends Component {
             case 'LOADED':
                 dish = this.state.dishes;
                 ingredients = dish.extendedIngredients.map(ingredients => (
-                    <tr>
-				<td>{ingredients.amount + ' ' +ingredients.unit} </td>
-				<td> {ingredients.name} </td>
-				<td> {price}</td>
-                <td>SEK</td>
-			</tr>
+
+                <tr key = {ingredients.id}>
+                    <td>{ingredients.amount + ' ' +ingredients.unit} </td>
+                    <td> {ingredients.name} </td>
+                    <td> {price}</td>
+                    <td>SEK</td>
+                </tr>
 
                 ));
 
@@ -66,14 +65,14 @@ class Detail extends Component {
 
         return (
         <div>
-		 <Sidebar model={this.props.model} />
-		 <div className="Detail">
+         <Sidebar model={this.props.model} />
+         <div className="Detail">
               <div id ='detailComponent'>
-                <div className="row">
+                <div key ={dish.id} className="row">
                     <div className="col-md-4">
                         <div id='dish-wrapper'>
-                        	<h4> {dish.title} </h4>
-		 					<img className="fitImage" src = {dish.image} />
+                            <h4> {dish.title} </h4>
+                            <img className="fitImage" src = {dish.image} />
                         </div>
                         <a id ='backtoSearch'href="#" className="btn btn-warning">Back to Search</a>
                     </div>
@@ -92,7 +91,7 @@ class Detail extends Component {
                                         </table>
                                     </div>
                                 </div>
-                                <a id ='addToMenu' href="#" className="btn btn-warning left" >Add to Menu</a>
+                                <a id ='addToMenu' onClick = {() => {this.props.model.addDishToMenu(dish.id)}} href="#" className="btn btn-warning left" >Add to Menu</a>
                             </div>
                         </div>
                     </div>
@@ -114,10 +113,10 @@ class Detail extends Component {
                    
                 </div>
    
-		 	
-		 </div>
+            
+         </div>
 
-		 </div>
+         </div>
 
         )
 
