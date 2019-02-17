@@ -3,19 +3,17 @@ import Sidebar from "../Sidebar/Sidebar";
 import Dishes from "../Dishes/Dishes";
 import "./SelectDish.css";
 import { Link } from "react-router-dom";
-import Detail from "../Detail/Detail";
 
 class SelectDish extends Component {
-
-  constructor(props) {
-    super(props);
-    // We create the state to store the various statuses
-    // e.g. API data loading or error
-    console.log(props)
+  consturctor() {
     this.state = {
-      type: this.props.model.getDishType()
+      arrDishes : ['appetizer', 'breakfast', 'dessert','dinner', 'drink', 'lunch' , 'main course', 'main dish','sauce', 'side dish',  'snack']
     };
-  }
+  };
+
+  checkSelected = (type) => {
+    return (type.toLowerCase()===this.props.model.getSearchQuery().type)?'selected':''
+  };
 
   render() {
     let dishType = null;
@@ -44,8 +42,6 @@ class SelectDish extends Component {
           </div>
         </div>
       ));
-
-   
 
     return (
       dishType

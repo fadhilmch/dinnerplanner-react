@@ -53,6 +53,7 @@ class Sidebar extends Component {
                                 <form className="form-inline">
                                     <span className='margin-right-5px'>People </span>
                                     <input
+                                        className='number-input'
                                         type="number"
                                         value={this.state.numberOfGuests}
                                         onChange={this.onNumberOfGuestsChanged}
@@ -82,10 +83,11 @@ class Sidebar extends Component {
                             <h4 className="left pad-left">My Dinner</h4>
                             <div className='pad-left'>
                                 <form className="form-inline">
-                                    <div className="form-group">
+                                    <div>
                                         <span className='margin-right-5px'>People </span>
                                     </div>
                                     <input
+                                        className='number-input'
                                         type="number"
                                         value={this.state.numberOfGuests}
                                         onChange={this.onNumberOfGuestsChanged}

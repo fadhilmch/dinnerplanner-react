@@ -28,3 +28,9 @@
 #dinner-nav {
 	margin-top: 80px;
 }
+
+.number-input {
+	width: 50px;
+	margin-left: 10px;
+	padding-left: 10px;
+}
