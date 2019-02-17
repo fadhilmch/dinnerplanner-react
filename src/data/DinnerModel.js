@@ -12,17 +12,17 @@ class DinnerModel extends ObservableModel {
     this.getNumberOfGuests();
     this.getCurrentDish();
     this.currentDish = 0;
-    this.selectedDish = 0;
+    this.selectedDish = ([]);
+    this.fetchedDishes = ([]);
+
   }
 
 getCurrentDish(){
-  console.log('ini id get: '+this.currentDish)
   return this.currentDish;
 }
 
 setCurrentDish(id){
   this.currentDish = id;
-  console.log('Ini id: '+ this.currentDish)
   this.notifyObservers();
 }
 
@@ -67,12 +67,32 @@ setCurrentDish(id){
         this.selectedDish.notifyObserver(dishTemp);
     };
 
+     //Returns all the dishes on the menu.
+    getFullMenu = () => {
+        return this.selectedDish.getValue();
+    };
+
+    getDishType = () => {
+        let dishType = [];
+        console.log(this.fetchedDishes)
+        this.fetchedDishes.forEach(dish => {
+            dish.dishTypes.forEach(type => {
+                if (dishType.indexOf(type) === -1)
+                    dishType.push(type);
+            })
+        });
+        return dishType;
+    };
+
+
   processResponse(response) {
     if (response.ok) {
       return response.json();
     }
     throw response;
   }
+
+
 }
 
 // Export an instance of DinnerModel

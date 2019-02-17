@@ -16,7 +16,8 @@ class Welcome extends Component {
           sunt in culpa qui officia deserunt mollit anim id est laborum.
          </p>
 
-        <Link to="/search">
+        <Link to="/search" model={this.props.modelInstance}>
+
           <button className="btn btn-warning">Start planning</button>
         </Link>
       </div>
