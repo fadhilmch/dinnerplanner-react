@@ -3,6 +3,7 @@ import Sidebar from "../Sidebar/Sidebar";
 import Dishes from "../Dishes/Dishes";
 import "./SelectDish.css";
 import { Link } from "react-router-dom";
+import Detail from "../Detail/Detail";
 
 class SelectDish extends Component {
 
@@ -12,7 +13,7 @@ class SelectDish extends Component {
     // e.g. API data loading or error
     console.log(props)
     this.state = {
-      id: 'id'
+      
     };
   }
 
@@ -38,10 +39,8 @@ class SelectDish extends Component {
                 </div>
               </div>
           </div>  
-           <Link to="/detail" >
-            <Dishes/>
-          </Link>
           
+           <Dishes model={this.props.model}/>
         </div>
 
       

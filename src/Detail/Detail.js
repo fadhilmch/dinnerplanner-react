@@ -5,68 +5,67 @@ import { Link } from "react-router-dom";
 import modelInstance from "../data/DinnerModel";
 
 class Detail extends Component {
-	constructor(props) {
-    super(props);
-    // We create the state to store the various statuses
-    // e.g. API data loading or error
-    this.state = {
-        status: "LOADING"
+    constructor(props) {
+        super(props);
+        console.log(this.props);
+        console.log(this.props);
+        // We create the state to store the various statuses
+        // e.g. API data loading or error
+        this.state = {
+            status: "LOADING",
+             id : this.props.model.getCurrentDish()
+
+        };
+    }
+
+    componentDidMount() {
       
-    };
-}
+        modelInstance
+            .getDish(this.state.id)
+            .then(dishes => {
+                this.setState({
+                    status: "LOADED",
+                    dishes: dishes
 
-  componentDidMount() {
-    // when data is retrieved we update the state
-    // this will cause the component to re-render
-   
-    modelInstance
-      .getDish(684100)
-      .then(dishes => {
-        this.setState({
-          status: "LOADED",
-          dishes: dishes	
+                });
+            })
+            .catch(() => {
+                this.setState({
+                    status: "ERROR"
+                });
+            });
+    }
 
-        });
-        console.log(dishes);
-      })
-      .catch(() => {
-        this.setState({
-          status: "ERROR"
-        });
-      });
-
-  }
-
-	render(){
-		let dish = null;
-		let ingredients = null;
-		let price =1;
-		switch(this.state.status){
-		case 'LOADING':
-		  dish = <em>Loading...</em>;
-		break;
-		case 'LOADED':
-		dish = this.state.dishes;
-		ingredients = dish.extendedIngredients.map(ingredients =>(
-			<tr>
+    render() {
+        let dish = null;
+        let ingredients = null;
+        let price = 1;
+        switch (this.state.status) {
+            case 'LOADING':
+                dish = <em>Loading...</em>;
+                break;
+            case 'LOADED':
+                dish = this.state.dishes;
+                ingredients = dish.extendedIngredients.map(ingredients => (
+                    <tr>
 				<td>{ingredients.amount + ' ' +ingredients.unit} </td>
 				<td> {ingredients.name} </td>
 				<td> {price}</td>
                 <td>SEK</td>
 			</tr>
 
-		));
-		
-		break;
+                ));
 
-		default:
-        dish = <b>Failed to load data, please try again</b>;
-        break;
+                break;
 
-		}
+            default:
+                dish = <b>Failed to load data, please try again</b>;
+                break;
 
-		return (
-		<div>
+        }
+
+        return (
+        <div>
 		 <Sidebar model={this.props.model} />
 		 <div className="Detail">
               <div id ='detailComponent'>
@@ -93,7 +92,7 @@ class Detail extends Component {
                                         </table>
                                     </div>
                                 </div>
-                                <a id ='addToMenu'href="#" className="btn btn-warning left" >Add to Menu</a>
+                                <a id ='addToMenu' href="#" className="btn btn-warning left" >Add to Menu</a>
                             </div>
                         </div>
                     </div>
@@ -120,11 +119,9 @@ class Detail extends Component {
 
 		 </div>
 
-		 )
+        )
 
-}
+    }
 }
 
 export default Detail
-
-

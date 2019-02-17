@@ -3,6 +3,7 @@ import React, { Component } from "react";
 // we can import the model instance directly
 import modelInstance from "../data/DinnerModel";
 import "./Dishes.css";
+import { Link } from "react-router-dom";
 
 class Dishes extends Component {
   constructor(props) {
@@ -11,8 +12,11 @@ class Dishes extends Component {
     // e.g. API data loading or error
     this.state = {
       status: "LOADING"
+     
     };
   }
+  
+
 
   // this methods is called by React lifecycle when the
   // component is actually shown to the user (mounted to DOM)
@@ -26,6 +30,7 @@ class Dishes extends Component {
         this.setState({
           status: "LOADED",
           dishes: dishes.results
+         
         });
       })
       .catch(() => {
@@ -35,8 +40,12 @@ class Dishes extends Component {
       });
   }
 
+  
+
+
   render() {
     let dishesList = null;
+    console.log(this.props)
 
     // depending on the state we either generate
     // useful message to the user or show the list
@@ -45,20 +54,23 @@ class Dishes extends Component {
       case "LOADING":
         dishesList = <em>Loading...</em>;
         break;
-      case "LOADED":
+        case "LOADED":
         dishesList = this.state.dishes.map(dish => (        
-          <div key ={dish.id} id={dish.id} className="col-sm-6 col-md-3 col-lg-2 padding-top">
-                <div className="card">
-                    <div className='card-img-top'>
-                      <div className='image-wrapper'>
-                        <img src={'https://spoonacular.com/recipeImages/'+ dish.image}  /> 
+          <Link onClick = {() => {this.props.model.setCurrentDish(dish.id)}}  key ={dish.id} to='/detail' className="col-sm-6 col-md-3 col-lg-2 padding-top">
+          <div key ={dish.id} id={dish.id}>
+                  <div className="card">
+                      <div className='card-img-top'>
+                        <div className='image-wrapper'>
+                          <img src={'https://spoonacular.com/recipeImages/'+ dish.image}  /> 
+                        </div>
                       </div>
-                    </div>
-                    <div className="card-text" >
-                        <p>{dish.title} </p>
-                    </div>
-                </div> 
+                      <div className="card-text" >
+                          <p>{dish.title} </p>
+                      </div>
+                  </div> 
+
           </div>
+           </Link>
       
         ));
         break;
@@ -75,6 +87,8 @@ class Dishes extends Component {
       </div>
     );
   }
+
+
 }
 
 export default Dishes;
