@@ -10,7 +10,21 @@ class DinnerModel extends ObservableModel {
     super();
     this._numberOfGuests = 4;
     this.getNumberOfGuests();
+    this.getCurrentDish();
+    this.currentDish = 0;
+    this.selectedDish = 0;
   }
+
+getCurrentDish(){
+  console.log('ini id get: '+this.currentDish)
+  return this.currentDish;
+}
+
+setCurrentDish(id){
+  this.currentDish = id;
+  console.log('Ini id: '+ this.currentDish)
+  this.notifyObservers();
+}
 
   /**
    * Get the number of guests
@@ -29,8 +43,6 @@ class DinnerModel extends ObservableModel {
     this.notifyObservers();
   }
 
-  // API methods
-
   /**
    * Do an API call to the search API endpoint.
    * @returns {Promise<any>}
@@ -39,6 +51,21 @@ class DinnerModel extends ObservableModel {
     const url = `${BASE_URL}/recipes/search`;
     return fetch(url, httpOptions).then(this.processResponse);
   }
+
+  getDish(id) {
+     const url = `${BASE_URL}recipes/` + id +'/information?includeNutrition=false';
+    return fetch(url, httpOptions).then(this.processResponse);
+  }
+
+   // Add dish to menu
+    /** @param {number} id */
+    addDishToMenu = (id) => {
+        let dishTemp = this.selectedDish.getValue();
+        let dish = this.getDish(id);
+        if (dishTemp.map(value => (value.id)).indexOf(dish.id) === -1)
+            dishTemp.push(dish);
+        this.selectedDish.notifyObserver(dishTemp);
+    };
 
   processResponse(response) {
     if (response.ok) {
