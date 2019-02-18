@@ -48,6 +48,29 @@ class DinnerModel extends ObservableModel {
     return this._numberOfGuests;
   }
 
+  // fetchSearch = (type, query) => {
+  //   query = query.toLowerCase().replace(/\s/g, '+');
+  //   type = type.toLowerCase().replace(/\s/g, '+');
+  //   query = query === 'all' ? '' : query;
+  //   this._isLoading.notifyObserver(true);
+  //   let tempUrl = query == "" ? `${searchUrl}type=${type}` : `${searchUrl}type=${type}&query=${query}`;
+  //   return fetch(tempUrl, {
+  //           method: 'GET',
+  //           headers: {
+  //               'X-Mashape-key': header
+  //           }
+  //       }).then(res => res.json())
+  //       .then(data => {
+  //           this._isLoading.notifyObserver(false);
+  //           this.fetchedDishes.notifyObserver([...data.results]);
+  //           return data.recipes;
+  //       })
+  //       .catch(err => {
+  //           this._isLoading.notifyObserver(false);
+  //           return Promise.reject(Error(err.message))
+  //       })
+  // }
+
   /**
    * Set number of guests
    * @param {number} num
@@ -62,7 +85,7 @@ class DinnerModel extends ObservableModel {
    * @returns {Promise<any>}
    */
   getAllDishes() {
-    const url = `${BASE_URL}/recipes/search`;
+    const url = `${BASE_URL}/recipes/search?number=20&offset=0&`;
     return fetch(url, httpOptions).then(this.processResponse);
   }
 

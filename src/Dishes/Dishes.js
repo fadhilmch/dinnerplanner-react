@@ -42,7 +42,7 @@ class Dishes extends Component {
 
   render() {
     let dishesList = null;
-    console.log(this.props)
+    // console.log(this.props)
 
     // depending on the state we either generate
     // useful message to the user or show the list
