@@ -111,7 +111,7 @@ class DinnerModel extends ObservableModel {
 
   addDishToMenu(id){
     let dishTemp = this.selectedDish;
-    let dishInfo = this.getDish2(id).then(dish => dish).then(console.log);
+    let dishInfo = this.getDish2(id).then(dish => dish);
     dishTemp.push(dishInfo);
     console.log('abis ditambahkan')
     console.log(dishTemp);
