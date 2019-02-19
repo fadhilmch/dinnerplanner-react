@@ -44,7 +44,7 @@ class Sidebar extends Component {
           <div id='sidebarView'>
                     <div className='d-block d-md-none'>
                         <nav id='dinner-nav' className="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-                            <a className="navbar-brand" href="#">My Dinner</a>
+                            <button className="navbar-brand" href="#">My Dinner</button>
                             <div id='nav-price' className='ml-auto'></div>
                             <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
                                 <span className="navbar-toggler-icon"></span>

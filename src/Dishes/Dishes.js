@@ -42,7 +42,6 @@ class Dishes extends Component {
 
   render() {
     let dishesList = null;
-    console.log(this.props)
 
     // depending on the state we either generate
     // useful message to the user or show the list
@@ -58,7 +57,7 @@ class Dishes extends Component {
                   <div className="card">
                       <div className='card-img-top'>
                         <div className='image-wrapper'>
-                          <img src={'https://spoonacular.com/recipeImages/'+ dish.image}  /> 
+                          <img src={'https://spoonacular.com/recipeImages/'+ dish.image} alt = {dish.id}  /> 
                         </div>
                       </div>
                       <div className="card-text" >

@@ -1,14 +1,15 @@
 import React, { Component } from "react";
 import Sidebar from "../Sidebar/Sidebar";
 import "./Detail.css";
-import { Link } from "react-router-dom";
 import modelInstance from "../data/DinnerModel";
+
 
 class Detail extends Component {
     constructor(props) {
         super(props);
         // We create the state to store the various statuses
         // e.g. API data loading or error
+        console.log(props)
         this.state = {
             status: "LOADING",
             id: this.props.model.getCurrentDish()
@@ -17,7 +18,6 @@ class Detail extends Component {
     }
 
     componentDidMount() {
-
         modelInstance
             .getDish(this.state.id)
             .then(dishes => {
@@ -32,6 +32,10 @@ class Detail extends Component {
                     status: "ERROR"
                 });
             });
+    }
+
+    handleClick(){
+        
     }
 
     render() {
@@ -63,7 +67,7 @@ class Detail extends Component {
 
         }
 
-        return (
+        return  (
         <div>
          <Sidebar model={this.props.model} />
          <div className="Detail">
@@ -72,9 +76,9 @@ class Detail extends Component {
                     <div className="col-md-4">
                         <div id='dish-wrapper'>
                             <h4> {dish.title} </h4>
-                            <img className="fitImage" src = {dish.image} />
+                            <img className="fitImage" src = {dish.image} alt = {dish.title}/>
                         </div>
-                        <a id ='backtoSearch'href="#" className="btn btn-warning">Back to Search</a>
+                        <button id ='backtoSearch' href="#"  className="btn btn-warning" >Back to Search</button>
                     </div>
                     <div className="col-md-8">
                         <div>
@@ -91,7 +95,7 @@ class Detail extends Component {
                                         </table>
                                     </div>
                                 </div>
-                                <a id ='addToMenu' onClick = {() => {this.props.model.addDishToMenu(dish.id)}} href="#" className="btn btn-warning left" >Add to Menu</a>
+                                <button id ='addToMenu' onClick = {() => {this.props.model.addDishToMenu(dish.id)}} href="#" className="btn btn-warning left" >Add to Menu</button>
                             </div>
                         </div>
                     </div>
@@ -113,7 +117,6 @@ class Detail extends Component {
                    
                 </div>
    
-            
          </div>
 
          </div>
@@ -121,6 +124,8 @@ class Detail extends Component {
         )
 
     }
+
+   
 }
 
 export default Detail

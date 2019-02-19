@@ -12,7 +12,7 @@ class DinnerModel extends ObservableModel {
     this.getNumberOfGuests();
     this.getCurrentDish();
     this.currentDish = 0;
-    this.selectedDish = 0;
+    this.selectedDish = ([]);
     this.searchQuery = { 'type': 'all', 'query': '' };
   }
 
@@ -33,7 +33,7 @@ class DinnerModel extends ObservableModel {
   getCurrentDish(){
     return this.currentDish;
   }
-
+ 
   setCurrentDish(id){
     this.currentDish = id;
     console.log('Ini id: '+ this.currentDish)
@@ -71,9 +71,11 @@ class DinnerModel extends ObservableModel {
     return fetch(url, httpOptions).then(this.processResponse);
   }
 
+
    // Add dish to menu
     /** @param {number} id */
     addDishToMenu = (id) => {
+        console.log(this.selectedDish);
         let dishTemp = this.selectedDish.getValue();
         let dish = this.getDish(id);
         if (dishTemp.map(value => (value.id)).indexOf(dish.id) === -1)
