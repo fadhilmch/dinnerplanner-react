@@ -2,49 +2,57 @@ import React, { Component } from "react";
 import "./Sidebar.css";
 
 class Sidebar extends Component {
-  constructor(props) {
-    super(props);
+    constructor(props) {
+        super(props);
 
-    // we put on state the properties we want to use and modify in the component
-    this.state = {
-      numberOfGuests: this.props.model.getNumberOfGuests()
+        // we put on state the properties we want to use and modify in the component
+        this.state = {
+            numberOfGuests: this.props.model.getNumberOfGuests(),
+            menu: this.props.model.getFullMenu()
+
+        };
+    }
+
+    // this methods is called by React lifecycle when the
+    // component is actually shown to the user (mounted to DOM)
+    // that's a good place to setup model observer
+    componentDidMount() {
+        this.props.model.addObserver(this);
+    }
+
+    // this is called when component is removed from the DOM
+    // good place to remove observer
+    componentWillUnmount() {
+        this.props.model.removeObserver(this);
+    }
+
+    // in our update function we modify the state which will
+    // cause the component to re-render
+    update() {
+        this.setState({
+            numberOfGuests: this.props.model.getNumberOfGuests(),
+            menu: this.props.model.getFullMenu()
+
+              
+        });
+    }
+
+    // our handler for the input's on change event
+    onNumberOfGuestsChanged = e => {
+        this.props.model.setNumberOfGuests(e.target.value);
     };
-  }
 
-  // this methods is called by React lifecycle when the
-  // component is actually shown to the user (mounted to DOM)
-  // that's a good place to setup model observer
-  componentDidMount() {
-    this.props.model.addObserver(this);
-  }
-
-  // this is called when component is removed from the DOM
-  // good place to remove observer
-  componentWillUnmount() {
-    this.props.model.removeObserver(this);
-  }
-
-  // in our update function we modify the state which will
-  // cause the component to re-render
-  update() {
-    this.setState({
-      numberOfGuests: this.props.model.getNumberOfGuests()
-    });
-  }
-
-  // our handler for the input's on change event
-  onNumberOfGuestsChanged = e => {
-    this.props.model.setNumberOfGuests(e.target.value);
-  };
-
-  render() {
-    return (
-      <div className="Sidebar">
+    render() {
+        let menu = null;
+        menu = this.state.menu;
+        console.log(menu);
+        return (
+            <div className="Sidebar">
        
           <div id='sidebarView'>
                     <div className='d-block d-md-none'>
                         <nav id='dinner-nav' className="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-                            <a className="navbar-brand" href="#">My Dinner</a>
+                            <button className="navbar-brand" href="#">My Dinner</button>
                             <div id='nav-price' className='ml-auto'></div>
                             <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
                                 <span className="navbar-toggler-icon"></span>
@@ -104,7 +112,16 @@ class Sidebar extends Component {
                                     </tr>
                                 </thead>
                                 <tbody className='menu-table'>
-                                </tbody>
+                                    {
+                                        this.state.menu.map((menu,i) => (
+                                        <tr key={'menu-'+i} className ="dishItem" id ={menu.id}>
+                                            <td>{menu.title}</td> 
+                                             <td>habehabe</td> 
+
+                                        </tr>
+                                      ))
+                                    }
+                               </tbody>
                             </table>
                         </div>
                         <div className='total-wrapper'>
@@ -118,8 +135,8 @@ class Sidebar extends Component {
                 </div>
      
       </div>
-    );
-  }
+        );
+    }
 }
 
 export default Sidebar;

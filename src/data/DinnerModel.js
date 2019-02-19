@@ -12,7 +12,7 @@ class DinnerModel extends ObservableModel {
     this.getNumberOfGuests();
     this.getCurrentDish();
     this.currentDish = 0;
-    this.selectedDish = 0;
+    this.selectedDish = new Array();
     this.searchQuery = { 'type': 'all', 'query': '' };
     this.isLoading = false;
   }
@@ -34,7 +34,7 @@ class DinnerModel extends ObservableModel {
   getCurrentDish(){
     return this.currentDish;
   }
-
+ 
   setCurrentDish(id){
     this.currentDish = id;
     console.log('Ini id: '+ this.currentDish)
@@ -86,23 +86,41 @@ class DinnerModel extends ObservableModel {
   }
 
   getDish(id) {
-     const url = `${BASE_URL}recipes/` + id +'/information?includeNutrition=false';
+    const url = `${BASE_URL}recipes/` + id +'/information?includeNutrition=false';
     return fetch(url, httpOptions).then(this.processResponse);
   }
+  getDish2(id){
+    const url = `${BASE_URL}recipes/` + id +'/information?includeNutrition=false';
+    return fetch(url, httpOptions).then(this.getDishInfo);
+  }
 
-   // Add dish to menu
-    /** @param {number} id */
-    addDishToMenu = (id) => {
-        let dishTemp = this.selectedDish.getValue();
-        let dish = this.getDish(id);
-        if (dishTemp.map(value => (value.id)).indexOf(dish.id) === -1)
-            dishTemp.push(dish);
-        this.selectedDish.notifyObserver(dishTemp);
-    };
+  getDishInfo(response){
+    if(response.ok){
+      return response.json()
+      .then(dish => dish)
+    }
+
+    throw response;
+   
+      
+  }
+
+  addDishToMenu(id){
+    let dishTemp = this.selectedDish;
+    let dishInfo = this.getDish2(id).then(dish => dish);
+    dishTemp.push(dishInfo);
+    console.log('abis ditambahkan')
+    console.log(dishTemp);
+    this.notifyObservers();
+  }
+
+
 
      //Returns all the dishes on the menu.
-    getFullMenu = () => {
-        return this.selectedDish.getValue();
+    getFullMenu (){
+        console.log('selected menu');
+        return this.selectedDish;
+
     };
 
     getDishType = () => {
