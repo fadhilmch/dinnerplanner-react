@@ -12,7 +12,7 @@ class DinnerModel extends ObservableModel {
     this.getNumberOfGuests();
     this.getCurrentDish();
     this.currentDish = 0;
-    this.selectedDish = ([]);
+    this.selectedDish = new Array();
     this.searchQuery = { 'type': 'all', 'query': '' };
   }
 
@@ -48,6 +48,29 @@ class DinnerModel extends ObservableModel {
     return this._numberOfGuests;
   }
 
+  // fetchSearch = (type, query) => {
+  //   query = query.toLowerCase().replace(/\s/g, '+');
+  //   type = type.toLowerCase().replace(/\s/g, '+');
+  //   query = query === 'all' ? '' : query;
+  //   this._isLoading.notifyObserver(true);
+  //   let tempUrl = query == "" ? `${searchUrl}type=${type}` : `${searchUrl}type=${type}&query=${query}`;
+  //   return fetch(tempUrl, {
+  //           method: 'GET',
+  //           headers: {
+  //               'X-Mashape-key': header
+  //           }
+  //       }).then(res => res.json())
+  //       .then(data => {
+  //           this._isLoading.notifyObserver(false);
+  //           this.fetchedDishes.notifyObserver([...data.results]);
+  //           return data.recipes;
+  //       })
+  //       .catch(err => {
+  //           this._isLoading.notifyObserver(false);
+  //           return Promise.reject(Error(err.message))
+  //       })
+  // }
+
   /**
    * Set number of guests
    * @param {number} num
@@ -62,30 +85,46 @@ class DinnerModel extends ObservableModel {
    * @returns {Promise<any>}
    */
   getAllDishes() {
-    const url = `${BASE_URL}/recipes/search`;
+    const url = `${BASE_URL}/recipes/search?number=20&offset=0&`;
     return fetch(url, httpOptions).then(this.processResponse);
   }
 
   getDish(id) {
-     const url = `${BASE_URL}recipes/` + id +'/information?includeNutrition=false';
+    const url = `${BASE_URL}recipes/` + id +'/information?includeNutrition=false';
     return fetch(url, httpOptions).then(this.processResponse);
+  }
+  getDish2(id){
+    const url = `${BASE_URL}recipes/` + id +'/information?includeNutrition=false';
+    return fetch(url, httpOptions).then(this.getDishInfo);
+  }
+
+  getDishInfo(response){
+    if(response.ok){
+      return response.json()
+      .then(dish => dish)
+    }
+
+    throw response;
+   
+      
+  }
+
+  addDishToMenu(id){
+    let dishTemp = this.selectedDish;
+    let dishInfo = this.getDish2(id).then(dish => dish).then(console.log);
+    dishTemp.push(dishInfo);
+    console.log('abis ditambahkan')
+    console.log(dishTemp);
+    this.notifyObservers();
   }
 
 
-   // Add dish to menu
-    /** @param {number} id */
-    addDishToMenu = (id) => {
-        console.log(this.selectedDish);
-        let dishTemp = this.selectedDish.getValue();
-        let dish = this.getDish(id);
-        if (dishTemp.map(value => (value.id)).indexOf(dish.id) === -1)
-            dishTemp.push(dish);
-        this.selectedDish.notifyObserver(dishTemp);
-    };
 
      //Returns all the dishes on the menu.
-    getFullMenu = () => {
-        return this.selectedDish.getValue();
+    getFullMenu (){
+        console.log('selected menu');
+        return this.selectedDish;
+
     };
 
     getDishType = () => {
