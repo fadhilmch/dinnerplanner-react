@@ -14,6 +14,7 @@ class DinnerModel extends ObservableModel {
     this.currentDish = 0;
     this.selectedDish = 0;
     this.searchQuery = { 'type': 'all', 'query': '' };
+    this.isLoading = false;
   }
 
   getSearchQuery = () => {
@@ -48,25 +49,20 @@ class DinnerModel extends ObservableModel {
     return this._numberOfGuests;
   }
 
-  // fetchSearch = (type, query) => {
-  //   query = query.toLowerCase().replace(/\s/g, '+');
-  //   type = type.toLowerCase().replace(/\s/g, '+');
+  // fetchSearch = () => {
+  //   query = this.searchQuery.query.toLowerCase().replace(/\s/g, '+');
+  //   type = this.searchQuery.type.toLowerCase().replace(/\s/g, '+');
   //   query = query === 'all' ? '' : query;
-  //   this._isLoading.notifyObserver(true);
-  //   let tempUrl = query == "" ? `${searchUrl}type=${type}` : `${searchUrl}type=${type}&query=${query}`;
-  //   return fetch(tempUrl, {
-  //           method: 'GET',
-  //           headers: {
-  //               'X-Mashape-key': header
-  //           }
-  //       }).then(res => res.json())
+  //   this.isLoading = true;
+  //   let tempUrl = (query == "") ? `${BASE_URL}/recipes/search?number=20&offset=0&type=${type}` : `${searchUrl}type=${type}&query=${query}`;
+  //   return fetch(tempUrl, httpOptions).then(res => res.json())
   //       .then(data => {
-  //           this._isLoading.notifyObserver(false);
+  //           this.isLoading = false;
   //           this.fetchedDishes.notifyObserver([...data.results]);
   //           return data.recipes;
   //       })
   //       .catch(err => {
-  //           this._isLoading.notifyObserver(false);
+  //           this.isLoading = false;
   //           return Promise.reject(Error(err.message))
   //       })
   // }
