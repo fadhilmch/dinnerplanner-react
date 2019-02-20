@@ -14,11 +14,11 @@ class Dishes extends Component {
 
   componentWillUnmount() {
       this.model.removeObserver(this);
-  }
+  };
   
   componentDidMount() {
     this.model.addObserver(this);
-    this.model.fetchSearch()
+    this.model.getAllDishes()
       .then(dishes => {
         this.setState({
           status: "LOADED",
@@ -30,28 +30,33 @@ class Dishes extends Component {
           status: "ERROR"
         });
       });
-  }
+  };
 
   update() {
-    if(this.model.getIsLoading()){
-      this.setState({
-        status: "LOADING",
-      });
-    } else {
+    this.setState({status: 'LOADING'});
+    this.props.model.getAllDishes()
+    .then(dishes => {
       this.setState({
         status: "LOADED",
-        dishes: this.model.getAllDishes(),
+        dishes
       });
-    }
-  }
+    })
+    .catch(() => {
+      this.setState({
+        status: "ERROR"
+      });
+    });
+  };
 
   render() {
     let dishesList = null;
     switch (this.state.status) {
+
       case "LOADING":
         dishesList = <em>Loading...</em>;
         break;
-        case "LOADED":
+
+      case "LOADED":
         dishesList = this.state.dishes.map(dish => (        
           <Link onClick = {() => {this.model.setCurrentDish(dish.id)}}  key ={dish.id} to='/detail' className="col-sm-6 col-md-3 col-lg-2 padding-top">
           <div key ={dish.id} id={dish.id}>
@@ -71,10 +76,11 @@ class Dishes extends Component {
       
         ));
         break;
+
       default:
         dishesList = <b>Failed to load data, please try again</b>;
         break;
-    }
+    };
 
     return (
       <div className="Dishes">
@@ -83,9 +89,7 @@ class Dishes extends Component {
         </div>
       </div>
     );
-  }
-
-
-}
+  };
+};
 
 export default Dishes;

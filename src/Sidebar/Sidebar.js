@@ -33,7 +33,6 @@ class Sidebar extends Component {
     render() {
         let menu = null;
         menu = this.state.menu;
-        console.log(menu);
         return (
             <div className="Sidebar">
        

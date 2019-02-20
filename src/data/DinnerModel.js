@@ -13,32 +13,26 @@ class DinnerModel extends ObservableModel {
     this._numberOfGuests = 4;
     this.currentDish = 0;
     this.selectedDish = [];
-    this._isLoading = false;
-    this._dishes = [];
-    this._error = '';
     this._searchQuery = {type: 'all', query: ''};
   }
 
   /**
    * Fetch data based on filter query from the API
-   * @param {String} query
-   * @param {String} type
    * @return {Array} 
    */
-  fetchSearch = (query='',type='all') => {
+  getAllDishes = () => {
+    let {query, type} = this.getSearchQuery();
     query = query.toLowerCase().replace(/\s/g, '+');
     type = type.toLowerCase().replace(/\s/g, '+');
     query = (query === 'all') ? '' : query;
-    this.setIsLoading(true);
+    // this.setIsLoading(true);
     let tempUrl = (query === "") ? `${BASE_URL}/recipes/search?number=20&offset=0&type=${type}` : 
       `${BASE_URL}/recipes/search?number=20&offset=0&type=${type}&query=${query}`;
     return fetch(tempUrl, httpOptions).then(res => res.json())
       .then(data => {
-        this.setIsLoading(false);
-        return this.setDishes(data.results);
+        return data.results;
       })
       .catch(err => {
-        this.setIsLoading(false);
         return Promise.reject(Error(err.message))
       })
   }
@@ -69,24 +63,7 @@ class DinnerModel extends ObservableModel {
   getSearchQuery = () => {
     return {...this._searchQuery};
   }
-  
-    /**
-   * Set loading status
-   * @param {Boolean} loading
-   */
-  setIsLoading = (loading) => {
-    this._isLoading = loading;
-    this.notifyObservers();
-  }
-
-    /**
-   * Get loading status
-   * @return {Boolean} 
-   */
-  getIsLoading = () => {
-    return this._isLoading;
-  }
-
+ 
   getCurrentDish() {
     return this.currentDish;
   }
@@ -113,16 +90,6 @@ class DinnerModel extends ObservableModel {
   setNumberOfGuests(num) {
     this._numberOfGuests = num;
     this.notifyObservers();
-  }
-
-  /**
-   * Do an API call to the search API endpoint.
-   * @returns {Promise<any>}
-   */
-  getAllDishes() {
-    // const url = `${BASE_URL}/recipes/search?number=20&offset=0&`;
-    // return fetch(url, httpOptions).then(this.processResponse);
-    return [...this._dishes];
   }
 
   getDish(id) {

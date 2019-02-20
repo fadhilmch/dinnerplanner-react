@@ -14,10 +14,6 @@ class SelectDish extends Component {
     };
   };
 
-  componentWillMount() {
-    // model.addObserver();
-  };
-
   checkSelected = (type) => {
     return (type.toLowerCase() === this.state.selectedType);
   };
@@ -27,7 +23,7 @@ class SelectDish extends Component {
   };
 
   handleSearch = () => {
-    this.props.model.fetchSearch(this.state.query, this.state.selectedType);
+    this.model.setSearchQuery(this.state.selectedType, this.state.query);
   };
 
   handleType = (e) => {
