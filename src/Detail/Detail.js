@@ -12,7 +12,9 @@ class Detail extends Component {
         console.log(props)
         this.state = {
             status: "LOADING",
-            id: this.props.model.getCurrentDish()
+            id: this.props.model.getCurrentDish(),
+            numberOfGuests: this.props.model.getNumberOfGuests()
+
 
         };
     }
@@ -34,8 +36,10 @@ class Detail extends Component {
             });
     }
 
-    handleClick() {
-
+     update() {
+        this.setState({
+            numberOfGuests: this.props.model.getNumberOfGuests() 
+        });
     }
 
     render() {
@@ -93,7 +97,7 @@ class Detail extends Component {
                         <div>
                             <div className='background_table'>
                                 <div id='guestIngredients'>
-                                    <h5 className="left"> INGREDIENTS FOR {this.state.guest}  PEOPLE</h5>
+                                    <h5 className="left"> INGREDIENTS FOR {this.state.numberOfGuests}  PEOPLE</h5>
                                 </div>
                                 <div className="left">
                                     <div className="table-responsive">

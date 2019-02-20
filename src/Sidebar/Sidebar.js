@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./Sidebar.css";
+import { Link } from "react-router-dom";
 
 class Sidebar extends Component {
     constructor(props) {
@@ -31,9 +32,7 @@ class Sidebar extends Component {
     update() {
         this.setState({
             numberOfGuests: this.props.model.getNumberOfGuests(),
-            menu: this.props.model.getFullMenu()
-
-              
+            menu: this.props.model.getFullMenu()  
         });
     }
 
@@ -42,13 +41,15 @@ class Sidebar extends Component {
         this.props.model.setNumberOfGuests(e.target.value);
     };
 
+
+
     render() {
         let menu = null;
         menu = this.state.menu;
         console.log(menu);
         return (
-            <div className="Sidebar">
-       
+        <div className="Sidebar">
+        
           <div id='sidebarView'>
                     <div className='d-block d-md-none'>
                         <nav id='dinner-nav' className="navbar navbar-expand-lg navbar-light bg-light fixed-top">
@@ -81,7 +82,9 @@ class Sidebar extends Component {
                                     <span className='totalCost'></span>
                                 </div>
                                 <div>
-                                    <button type="button" className="btn btn-md btn-warning btn-confirm" disabled="disabled">Confirm Dinner</button>
+                                <Link to="/summary" model={this.props.modelInstance}>
+                                    <button id ='btn-confirm' className="btn btn-md btn-warning btn-confirm">Confirm Dinner</button>
+                                </Link>
                                 </div>
                             </div>
                         </nav>
@@ -116,7 +119,7 @@ class Sidebar extends Component {
                                         this.state.menu.map((menu,i) => (
                                         <tr key={'menu-'+i} className ="dishItem" id ={menu.id}>
                                             <td>{menu.title}</td> 
-                                             <td>habehabe</td> 
+                                             <td>{menu.pricePerServing* this.state.numberOfGuests}</td> 
 
                                         </tr>
                                       ))
@@ -127,10 +130,13 @@ class Sidebar extends Component {
                         <div className='total-wrapper'>
                             <span className='totalCost'></span>
                         </div>
-                        <div className='row'>
-                            <button type="button" className="btn btn-md btn-warning mx-auto col-10 btn-confirm" disabled="disabled">Confirm
-                                Dinner</button>
-                        </div>
+                         <Link to="/summary" model={this.props.modelInstance}>
+                            <div className='row'>         
+                                    <button id ='btn-confirm' onClick = {() => {this.props.model.getFullMenu()}} className="btn btn-md btn-warning mx-auto col-10 btn-confirm">Confirm
+                                    Dinner</button>
+                                
+                            </div>
+                        </Link>
                     </div>
                 </div>
      

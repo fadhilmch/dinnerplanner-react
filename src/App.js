@@ -4,6 +4,8 @@ import Welcome from "./Welcome/Welcome";
 import modelInstance from "./data/DinnerModel";
 import SelectDish from "./SelectDish/SelectDish";
 import Detail from './Detail/Detail';
+import Summary from './Summary/Summary';
+import Print from './Print/Print';
 import "./App.css";
 
 class App extends Component {
@@ -34,6 +36,18 @@ class App extends Component {
             <Route 
               path="/detail"
               render={() => <Detail model={modelInstance} />}
+              
+            />
+
+             <Route 
+              path="/summary"
+              render={() => <Summary model={modelInstance} />}
+              
+            />
+
+            <Route 
+              path="/print"
+              render={() => <Print model={modelInstance} />}
               
             />
           </header>
