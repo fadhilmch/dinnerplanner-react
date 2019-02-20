@@ -2,42 +2,98 @@ import ObservableModel from "./ObservableModel";
 
 const BASE_URL = "http://sunset.nada.kth.se:8080/iprog/group/29/";
 const httpOptions = {
-  headers: { "X-Mashape-Key": '3d2a031b4cmsh5cd4e7b939ada54p19f679jsn9a775627d767' }
+  headers: {
+    "X-Mashape-Key": '3d2a031b4cmsh5cd4e7b939ada54p19f679jsn9a775627d767'
+  }
 };
 
 class DinnerModel extends ObservableModel {
   constructor() {
     super();
     this._numberOfGuests = 4;
-    this.getNumberOfGuests();
-    this.getCurrentDish();
     this.currentDish = 0;
-    this.selectedDish = new Array();
-    this.searchQuery = { 'type': 'all', 'query': '' };
-    this.isLoading = false;
+    this.selectedDish = [];
+    this._isLoading = false;
+    this._dishes = [];
+    this._error = '';
+    this._searchQuery = {type: 'all', query: ''};
   }
 
+  /**
+   * Fetch data based on filter query from the API
+   * @param {String} query
+   * @param {String} type
+   * @return {Array} 
+   */
+  fetchSearch = (query='',type='all') => {
+    query = query.toLowerCase().replace(/\s/g, '+');
+    type = type.toLowerCase().replace(/\s/g, '+');
+    query = (query === 'all') ? '' : query;
+    this.setIsLoading(true);
+    let tempUrl = (query === "") ? `${BASE_URL}/recipes/search?number=20&offset=0&type=${type}` : 
+      `${BASE_URL}/recipes/search?number=20&offset=0&type=${type}&query=${query}`;
+    return fetch(tempUrl, httpOptions).then(res => res.json())
+      .then(data => {
+        this.setIsLoading(false);
+        return this.setDishes(data.results);
+      })
+      .catch(err => {
+        this.setIsLoading(false);
+        return Promise.reject(Error(err.message))
+      })
+  }
+
+  /**
+   * Set dishes fetched from API
+   * @param {Array} dish
+   */
+  setDishes = (dishes) => {
+    this._dishes = dishes;
+    this.notifyObservers();
+  }
+
+    /**
+   * Set search query parameter
+   * @param {String} type
+   * @param {String} query
+   */
+  setSearchQuery = (type='all', query='') => {
+    this._searchQuery = {type, query};
+    this.notifyObservers();
+  }
+
+    /**
+   * Set dishes fetched from API
+   * @param {Array} dish
+   */
   getSearchQuery = () => {
-    return this.searchQuery;
-  };
+    return {...this._searchQuery};
+  }
+  
+    /**
+   * Set loading status
+   * @param {Boolean} loading
+   */
+  setIsLoading = (loading) => {
+    this._isLoading = loading;
+    this.notifyObservers();
+  }
 
-  setSearchQuery = (query) => {
-    if (query) {
-        this.searchQuery = { 'type': query.type, 'query': query.query };
-        // this.searchQuery.notifyObserver({ 'type': query.type, 'query': query.query });
-    } else {
-        this.searchQuery = { 'type': 'all', 'query': '' };
-        // this.searchQuery.notifyObserver({ 'type': 'all', 'query': '' });
-    };
-  };
+    /**
+   * Get loading status
+   * @return {Boolean} 
+   */
+  getIsLoading = () => {
+    return this._isLoading;
+  }
 
-  getCurrentDish(){
+  getCurrentDish() {
     return this.currentDish;
   }
- 
-  setCurrentDish(id){
+
+  setCurrentDish(id) {
     this.currentDish = id;
-    console.log('Ini id: '+ this.currentDish)
+    console.log('Ini id: ' + this.currentDish)
     this.notifyObservers();
   }
 
@@ -49,23 +105,6 @@ class DinnerModel extends ObservableModel {
     return this._numberOfGuests;
   }
 
-  // fetchSearch = () => {
-  //   query = this.searchQuery.query.toLowerCase().replace(/\s/g, '+');
-  //   type = this.searchQuery.type.toLowerCase().replace(/\s/g, '+');
-  //   query = query === 'all' ? '' : query;
-  //   this.isLoading = true;
-  //   let tempUrl = (query == "") ? `${BASE_URL}/recipes/search?number=20&offset=0&type=${type}` : `${searchUrl}type=${type}&query=${query}`;
-  //   return fetch(tempUrl, httpOptions).then(res => res.json())
-  //       .then(data => {
-  //           this.isLoading = false;
-  //           this.fetchedDishes.notifyObserver([...data.results]);
-  //           return data.recipes;
-  //       })
-  //       .catch(err => {
-  //           this.isLoading = false;
-  //           return Promise.reject(Error(err.message))
-  //       })
-  // }
 
   /**
    * Set number of guests
@@ -81,31 +120,32 @@ class DinnerModel extends ObservableModel {
    * @returns {Promise<any>}
    */
   getAllDishes() {
-    const url = `${BASE_URL}/recipes/search?number=20&offset=0&`;
-    return fetch(url, httpOptions).then(this.processResponse);
+    // const url = `${BASE_URL}/recipes/search?number=20&offset=0&`;
+    // return fetch(url, httpOptions).then(this.processResponse);
+    return [...this._dishes];
   }
 
   getDish(id) {
-    const url = `${BASE_URL}recipes/` + id +'/information?includeNutrition=false';
+    const url = `${BASE_URL}recipes/` + id + '/information?includeNutrition=false';
     return fetch(url, httpOptions).then(this.processResponse);
   }
-  getDish2(id){
-    const url = `${BASE_URL}recipes/` + id +'/information?includeNutrition=false';
+  getDish2(id) {
+    const url = `${BASE_URL}recipes/` + id + '/information?includeNutrition=false';
     return fetch(url, httpOptions).then(this.getDishInfo);
   }
 
-  getDishInfo(response){
-    if(response.ok){
+  getDishInfo(response) {
+    if (response.ok) {
       return response.json()
-      .then(dish => dish)
+        .then(dish => dish)
     }
 
     throw response;
-   
-      
+
+
   }
 
-  addDishToMenu(id){
+  addDishToMenu(id) {
     let dishTemp = this.selectedDish;
     this.getDish2(id).then(dish => {
       dishTemp.push(dish);
@@ -115,24 +155,24 @@ class DinnerModel extends ObservableModel {
 
 
 
-     //Returns all the dishes on the menu.
-    getFullMenu (){
-        console.log('selected menu');
-        return this.selectedDish;
+  //Returns all the dishes on the menu.
+  getFullMenu() {
+    console.log('selected menu');
+    return this.selectedDish;
 
-    };
+  };
 
-    getDishType = () => {
-        let dishType = [];
-        console.log(this.fetchedDishes)
-        this.fetchedDishes.forEach(dish => {
-            dish.dishTypes.forEach(type => {
-                if (dishType.indexOf(type) === -1)
-                    dishType.push(type);
-            })
-        });
-        return dishType;
-    };
+  getDishType = () => {
+    let dishType = [];
+    console.log(this.fetchedDishes)
+    this.fetchedDishes.forEach(dish => {
+      dish.dishTypes.forEach(type => {
+        if (dishType.indexOf(type) === -1)
+          dishType.push(type);
+      })
+    });
+    return dishType;
+  };
 
 
   processResponse(response) {

@@ -6,6 +6,7 @@ import "./SelectDish.css";
 class SelectDish extends Component {
   constructor(props) {
     super(props);
+    this.model = props.model;
     this.state = {
       arrDishes : ['all', 'appetizer', 'breakfast', 'dessert','dinner', 'drink', 'lunch' , 'main course', 'main dish','sauce', 'side dish',  'snack'],
       query: '',
@@ -13,27 +14,29 @@ class SelectDish extends Component {
     };
   };
 
+  componentWillMount() {
+    // model.addObserver();
+  };
+
   checkSelected = (type) => {
-    console.log((type.toLowerCase() === this.state.selectedType)?'selected':'');
     return (type.toLowerCase() === this.state.selectedType);
   };
 
   toTitleCase = (txt) => {
       return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-  }
+  };
 
   handleSearch = () => {
-    console.log('search: '+this.state.query + ' '+ this.state.selectedType)
-    // this.props.model.fetchSearch();
-  }
+    this.props.model.fetchSearch(this.state.query, this.state.selectedType);
+  };
 
   handleType = (e) => {
     this.setState({selectedType: e.target.value.toLowerCase()});
-  }
+  };
 
   handleQuery = (e) => {
     this.setState({query: e.target.value});
-  }
+  };
 
   render() {
     return (
@@ -64,7 +67,7 @@ class SelectDish extends Component {
         </div>
         </div>
     )
-  }
-}
+  };
+};
 
 export default SelectDish;
