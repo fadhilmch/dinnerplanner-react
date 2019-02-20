@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./Print.css";
-import modelInstance from "../data/DinnerModel";
 import { Link } from "react-router-dom";
+
 
 class Print extends Component{
 	constructor(props) {
@@ -27,7 +27,7 @@ class Print extends Component{
                 <div className="col-md-6" >
                     <div className="row">
                         <div className="col-md-6 center" >
-                            <img className="fitImage" src={dish.image}/>
+                            <img className="fitImage" src={dish.image} alt ={dish.title}/>
                         </div>
 
                         <div className="col-md-6" >
@@ -57,8 +57,10 @@ class Print extends Component{
 	                    <div id="guestOverview">
 	                        <h5 className="navbar-header">My Dinner: {this.state.numberOfGuests} People</h5>
 	                    </div>
+	                    <Link to="/search" model={this.props.modelInstance}>
 	                    <button type="button" className="btn btn-md btn-warning navbar-right" id="btnEditSummary">Go Back and Edit Dinner
 	                    </button>
+	                    </Link>
 	                </nav>
 	            </div>
 	          

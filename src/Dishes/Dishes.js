@@ -61,7 +61,7 @@ class Dishes extends Component {
                           <img src={'https://spoonacular.com/recipeImages/'+ dish.image} alt = {dish.id}  /> 
                         </div>
                       </div>
-                      <div className="card-text" className='center_txt'>
+                      <div className="card-text center_txt">
                           <p>{dish.title} </p>
                       </div>
                     </div> 

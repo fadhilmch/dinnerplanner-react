@@ -55,7 +55,7 @@ class Sidebar extends Component {
                         <nav id='dinner-nav' className="navbar navbar-expand-lg navbar-light bg-light fixed-top">
                             <button className="navbar-brand" href="#">My Dinner</button>
                             <div id='nav-price' className='ml-auto'></div>
-                            <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                            <button className="navbar-toggler" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
                                 <span className="navbar-toggler-icon"></span>
                             </button>
                             <div className="collapse navbar-collapse" id="navbarText">

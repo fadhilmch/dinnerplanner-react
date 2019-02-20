@@ -1,7 +1,5 @@
 import React, { Component } from "react";
-import Sidebar from "../Sidebar/Sidebar";
 import "./Summary.css";
-import modelInstance from "../data/DinnerModel";
 import { Link } from "react-router-dom";
 
 class Summary extends Component{
@@ -27,7 +25,7 @@ class Summary extends Component{
     	menuList = this.state.menu.map(dish => ( 
 				<div key = {dish.id} id={dish.id} className="col-sm-6 col-md-3 col-lg-2 dishItem">
 	                <div className ='card'>
-		                <img className="card-img-top" src={dish.image}/>
+		                <img className="card-img-top" src={dish.image} alt ={dish.title}/>
 		                <div className="card-text">
 		                    <p>{dish.title} </p>
 		                </div>
@@ -50,8 +48,10 @@ class Summary extends Component{
                     <div id="guestOverview">
                         <h5 className="navbar-header">My Dinner: {this.state.numberOfGuests} People</h5>
                     </div>
+                    <Link to="/search" model={this.props.modelInstance}>
                     <button type="button" className="btn btn-md btn-warning navbar-right" id="btnEditSummary">Go Back and Edit Dinner
                     </button>
+                    </Link>
                 </nav>
             </div>
             <div className='row'>
@@ -61,7 +61,7 @@ class Summary extends Component{
             <div className="container center">
             	<Link to="/print" model={this.props.modelInstance}>
                 <div className='margin-top'>
-                    <button className="btn btn-md btn-warning" id="btnPrint">Print Full Recipe </button>
+                    <button className="btn btn-md btn-warning center" id="btnPrint">Print Full Recipe </button>
                 </div>
                 </Link>
             </div>
