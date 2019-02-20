@@ -1,36 +1,28 @@
 import React, { Component } from "react";
-// Alternative to passing the moderl as the component property,
-// we can import the model instance directly
-import modelInstance from "../data/DinnerModel";
 import "./Dishes.css";
 import { Link } from "react-router-dom";
 
 class Dishes extends Component {
   constructor(props) {
     super(props);
-    // We create the state to store the various statuses
-    // e.g. API data loading or error
+    this.model = this.props.model;
     this.state = {
-      status: "LOADING"
-     
+      status: "LOADING",
+      dishes: [],
     };
-  }
+  };
+
+  componentWillUnmount() {
+      this.model.removeObserver(this);
+  };
   
-
-
-  // this methods is called by React lifecycle when the
-  // component is actually shown to the user (mounted to DOM)
-  // that's a good place to call the API and get the data
   componentDidMount() {
-    // when data is retrieved we update the state
-    // this will cause the component to re-render
-    modelInstance
-      .getAllDishes()
+    this.model.addObserver(this);
+    this.model.getAllDishes()
       .then(dishes => {
         this.setState({
           status: "LOADED",
-          dishes: dishes.results
-         
+          dishes
         });
       })
       .catch(() => {
@@ -38,27 +30,41 @@ class Dishes extends Component {
           status: "ERROR"
         });
       });
-  }
+  };
+
+  update() {
+    this.setState({status: 'LOADING'});
+    this.props.model.getAllDishes()
+    .then(dishes => {
+      this.setState({
+        status: "LOADED",
+        dishes
+      });
+    })
+    .catch(() => {
+      this.setState({
+        status: "ERROR"
+      });
+    });
+  };
 
   render() {
     let dishesList = null;
-
-    // depending on the state we either generate
-    // useful message to the user or show the list
-    // of returned dishes
     switch (this.state.status) {
+
       case "LOADING":
         dishesList = <em>Loading...</em>;
         break;
-        case "LOADED":
+
+      case "LOADED":
         dishesList = this.state.dishes.map(dish => (        
-          <Link onClick = {() => {this.props.model.setCurrentDish(dish.id)}}  key ={dish.id} to='/detail' className="col-sm-6 col-md-3 col-lg-2 padding-top">
+          <Link onClick = {() => {this.model.setCurrentDish(dish.id)}}  key ={dish.id} to='/detail' className="col-sm-6 col-md-3 col-lg-2 padding-top">
           <div key ={dish.id} id={dish.id}>
                   <div className ="max_height">
                     <div className = "card">
                       <div className='card-img-top'>
                         <div className='image-wrapper'>
-                          <img src={'https://spoonacular.com/recipeImages/'+ dish.image} alt = {dish.id}  /> 
+                          <img src={'https://spoonacular.com/recipeImages/'+ dish.image}  /> 
                         </div>
                       </div>
                       <div className="card-text center_txt">
@@ -72,10 +78,11 @@ class Dishes extends Component {
       
         ));
         break;
+
       default:
         dishesList = <b>Failed to load data, please try again</b>;
         break;
-    }
+    };
 
     return (
       <div className="Dishes">
@@ -84,9 +91,7 @@ class Dishes extends Component {
         </div>
       </div>
     );
-  }
-
-
-}
+  };
+};
 
 export default Dishes;
