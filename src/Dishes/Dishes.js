@@ -60,16 +60,18 @@ class Dishes extends Component {
         dishesList = this.state.dishes.map(dish => (        
           <Link onClick = {() => {this.model.setCurrentDish(dish.id)}}  key ={dish.id} to='/detail' className="col-sm-6 col-md-3 col-lg-2 padding-top">
           <div key ={dish.id} id={dish.id}>
-                  <div className="card">
+                  <div className ="max_height">
+                    <div className = "card">
                       <div className='card-img-top'>
                         <div className='image-wrapper'>
                           <img src={'https://spoonacular.com/recipeImages/'+ dish.image}  /> 
                         </div>
                       </div>
-                      <div className="card-text" >
+                      <div className="card-text" className='center_txt'>
                           <p>{dish.title} </p>
                       </div>
-                  </div> 
+                    </div> 
+                  </div>
 
           </div>
            </Link>

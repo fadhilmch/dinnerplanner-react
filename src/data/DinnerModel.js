@@ -108,24 +108,21 @@ class DinnerModel extends ObservableModel {
     }
 
     throw response;
-
-
   }
 
   addDishToMenu(id) {
     let dishTemp = this.selectedDish;
     this.getDish2(id).then(dish => {
-      dishTemp.push(dish);
-      this.notifyObservers();
+      if (dishTemp.indexOf(dish.id) === -1)
+          dishTemp.push(dish);
+          this.notifyObservers();
     });
   }
 
-
-
-  //Returns all the dishes on the menu.
-  getFullMenu() {
-    console.log('selected menu');
-    return this.selectedDish;
+     //Returns all the dishes on the menu.
+    getFullMenu = () =>{
+        console.log('selected menu');
+        return this.selectedDish;
 
   };
 
@@ -140,6 +137,13 @@ class DinnerModel extends ObservableModel {
     });
     return dishType;
   };
+
+  //Get dish total price per dish
+    dishPrice = (id) => {
+        let dishes = this.getFullMenu();
+        let price = dishes.filter(dish => { return dish.id === id })[0].pricePerServing;
+        return price * this.getNumberOfGuests();
+    };
 
 
   processResponse(response) {

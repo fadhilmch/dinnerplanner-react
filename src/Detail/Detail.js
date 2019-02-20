@@ -12,7 +12,9 @@ class Detail extends Component {
         console.log(props)
         this.state = {
             status: "LOADING",
-            id: this.props.model.getCurrentDish()
+            id: this.props.model.getCurrentDish(),
+            numberOfGuests: this.props.model.getNumberOfGuests()
+
 
         };
     }
@@ -34,14 +36,17 @@ class Detail extends Component {
             });
     }
 
-    handleClick(){
-        
+     update() {
+        this.setState({
+            numberOfGuests: this.props.model.getNumberOfGuests() 
+        });
     }
 
     render() {
         let dish = null;
         let ingredients = null;
         let price = 1;
+
         switch (this.state.status) {
             case 'LOADING':
                 dish = <em>Loading...</em>;
@@ -50,7 +55,7 @@ class Detail extends Component {
                 dish = this.state.dishes;
                 ingredients = dish.extendedIngredients.map(ingredients => (
 
-                <tr key = {ingredients.id}>
+                    <tr key = {ingredients.id}>
                     <td>{ingredients.amount + ' ' +ingredients.unit} </td>
                     <td> {ingredients.name} </td>
                     <td> {price}</td>
@@ -67,24 +72,32 @@ class Detail extends Component {
 
         }
 
-        return  (
-        <div>
+        return (
+            <div>
          <Sidebar model={this.props.model} />
          <div className="Detail">
-              <div id ='detailComponent'>
-                <div key ={dish.id} className="row">
+              <div id ='detailComponent' className= 'margin'>
+                <div className="row" key ={dish.id}>
+
                     <div className="col-md-4">
-                        <div id='dish-wrapper'>
+                        <div className='padding_bottom'>
+                        <div id='dish-wrapper' >
                             <h4> {dish.title} </h4>
                             <img className="fitImage" src = {dish.image} alt = {dish.title}/>
+                            <div className= "padding-top">
+                               
+                            </div>
+                         
                         </div>
                         <button id ='backtoSearch' href="#"  className="btn btn-warning" >Back to Search</button>
+                        </div>
                     </div>
                     <div className="col-md-8">
+                    <div className='padding_bottom'>
                         <div>
-                            <div>
+                            <div className='background_table'>
                                 <div id='guestIngredients'>
-                                    <h5 className="left"> INGREDIENTS FOR {this.state.guest}  PEOPLE</h5>
+                                    <h5 className="left"> INGREDIENTS FOR {this.state.numberOfGuests}  PEOPLE</h5>
                                 </div>
                                 <div className="left">
                                     <div className="table-responsive">
@@ -98,6 +111,7 @@ class Detail extends Component {
                                 <button id ='addToMenu' onClick = {() => {this.props.model.addDishToMenu(dish.id)}} href="#" className="btn btn-warning left" >Add to Menu</button>
                             </div>
                         </div>
+                    </div>
                     </div>
                 </div>
                  
@@ -125,7 +139,7 @@ class Detail extends Component {
 
     }
 
-   
+
 }
 
 export default Detail
