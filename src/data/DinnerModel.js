@@ -12,7 +12,7 @@ class DinnerModel extends ObservableModel {
     this.getNumberOfGuests();
     this.getCurrentDish();
     this.currentDish = 0;
-    this.selectedDish = new Array();
+    this.selectedDish = new Array(0);
     this.searchQuery = { 'type': 'all', 'query': '' };
   }
 
@@ -111,11 +111,13 @@ class DinnerModel extends ObservableModel {
 
   addDishToMenu(id){
     let dishTemp = this.selectedDish;
-    let dishInfo = this.getDish2(id).then(dish => dish);
+    let dishInfo = this.getDish2(id).then(dish => 
     dishTemp.push(dishInfo);
-    console.log('abis ditambahkan')
-    console.log(dishTemp);
     this.notifyObservers();
+  
+      );
+   
+   
   }
 
 

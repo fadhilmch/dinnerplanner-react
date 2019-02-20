@@ -2,8 +2,9 @@
     margin-right: auto;
     margin-left: auto;
 }
-.card {
-    height: 100%;
+
+.max_height{
+    heigh: 100%;
 }
 .image-wrapper{
     width:100%;
@@ -31,5 +32,9 @@
 
 .padding-top{
     padding-top: 10px;
+}
+
+.center_txt{
+   text-align: center;
 }
 
