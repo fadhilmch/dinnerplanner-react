@@ -86,7 +86,7 @@ class Dishes extends Component {
 
     return (
       <div className="Dishes">
-        <div className='row'>
+        <div className='row full-width'>
         {dishesList}
         </div>
       </div>

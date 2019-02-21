@@ -11,23 +11,29 @@ class DinnerModel extends ObservableModel {
   constructor() {
     super();
     this._numberOfGuests = 4;
-    this.currentDish = 0;
-    this.selectedDish = [];
-    this._searchQuery = {type: 'all', query: ''};
-  }
+    this._currentDish = 0;
+    this._selectedDish = [];
+    this._searchQuery = {
+      type: 'all',
+      query: ''
+    };
+  };
 
   /**
    * Fetch data based on filter query from the API
    * @return {Array} 
    */
   getAllDishes = () => {
-    let {query, type} = this.getSearchQuery();
+    let {
+      query,
+      type
+    } = this.getSearchQuery();
     query = query.toLowerCase().replace(/\s/g, '+');
     type = type.toLowerCase().replace(/\s/g, '+');
     query = (query === 'all') ? '' : query;
     // this.setIsLoading(true);
-    let tempUrl = (query === "") ? `${BASE_URL}/recipes/search?number=20&offset=0&type=${type}` : 
-      `${BASE_URL}/recipes/search?number=20&offset=0&type=${type}&query=${query}`;
+    let tempUrl = (query === "") ? `${BASE_URL}recipes/search?number=20&offset=0&type=${type}` :
+      `${BASE_URL}recipes/search?number=20&offset=0&type=${type}&query=${query}`;
     return fetch(tempUrl, httpOptions).then(res => res.json())
       .then(data => {
         return data.results;
@@ -35,7 +41,7 @@ class DinnerModel extends ObservableModel {
       .catch(err => {
         return Promise.reject(Error(err.message))
       })
-  }
+  };
 
   /**
    * Set dishes fetched from API
@@ -44,33 +50,45 @@ class DinnerModel extends ObservableModel {
   setDishes = (dishes) => {
     this._dishes = dishes;
     this.notifyObservers();
-  }
+  };
 
-    /**
+  /**
    * Set search query parameter
    * @param {String} type
    * @param {String} query
    */
-  setSearchQuery = (type='all', query='') => {
-    this._searchQuery = {type, query};
+  setSearchQuery = (type = 'all', query = '') => {
+    this._searchQuery = {
+      type,
+      query
+    };
     this.notifyObservers();
-  }
+  };
 
-    /**
+  /**
    * Set dishes fetched from API
    * @param {Array} dish
    */
   getSearchQuery = () => {
-    return {...this._searchQuery};
-  }
- 
-  getCurrentDish() {
-    return this.currentDish;
-  }
+    return {
+      ...this._searchQuery
+    };
+  };
 
+    /**
+   * Get current dish id
+   * @return {Number}
+   */
+  getCurrentDish() {
+    return this._currentDish;
+  };
+
+    /**
+   * Set current dish id
+   * @param {Number} dish
+   */
   setCurrentDish(id) {
-    this.currentDish = id;
-    console.log('Ini id: ' + this.currentDish)
+    this._currentDish = id;
     this.notifyObservers();
   }
 
@@ -82,7 +100,6 @@ class DinnerModel extends ObservableModel {
     return this._numberOfGuests;
   }
 
-
   /**
    * Set number of guests
    * @param {number} num
@@ -92,59 +109,67 @@ class DinnerModel extends ObservableModel {
     this.notifyObservers();
   }
 
-  getDish(id) {
-    const url = `${BASE_URL}recipes/` + id + '/information?includeNutrition=false';
+    /**
+   * Add dish to mmenu
+   * @param {number} id
+   */
+  addDishToMenu() {
+    let dishTemp = this._selectedDish;
+    this.getDish().then(dish => {
+      if (dishTemp.map(dish => dish.id).indexOf(dish.id) === -1)
+      {
+        dishTemp.push(dish);
+        this.notifyObservers();
+      };
+    });
+  };
+
+    /**
+   * Get full menu
+   * @return {Array}
+   */
+  getFullMenu = () => {
+    return [...this._selectedDish];
+  };
+
+    /**
+   * Get dish price
+   * @param {Number} id
+   * @return {Number}
+   */
+  dishPrice = (id) => {
+    let dishes = this.getFullMenu();
+    let price = dishes.filter(dish => {
+      return dish.id === id
+    })[0].pricePerServing;
+    return parseInt(price * this.getNumberOfGuests());
+  };
+
+    /**
+   * Fetch dish detail information based on ID
+   * @param {Number} id
+   * @return {Object}
+   */
+  getDish() {
+    const url = `${BASE_URL}recipes/` + this._currentDish + '/information?includeNutrition=false';
     return fetch(url, httpOptions).then(this.processResponse);
   }
-  getDish2(id) {
-    const url = `${BASE_URL}recipes/` + id + '/information?includeNutrition=false';
-    return fetch(url, httpOptions).then(this.getDishInfo);
-  }
 
-  getDishInfo(response) {
-    if (response.ok) {
-      return response.json()
-        .then(dish => dish)
-    }
 
-    throw response;
-  }
-
-  addDishToMenu(id) {
-    let dishTemp = this.selectedDish;
-    this.getDish2(id).then(dish => {
-      if (dishTemp.indexOf(dish.id) === -1)
-          dishTemp.push(dish);
-          this.notifyObservers();
-    });
-  }
-
-     //Returns all the dishes on the menu.
-    getFullMenu = () =>{
-        console.log('selected menu');
-        return this.selectedDish;
-
-  };
-
-  getDishType = () => {
-    let dishType = [];
-    console.log(this.fetchedDishes)
-    this.fetchedDishes.forEach(dish => {
-      dish.dishTypes.forEach(type => {
-        if (dishType.indexOf(type) === -1)
-          dishType.push(type);
-      })
-    });
-    return dishType;
-  };
-
-  //Get dish total price per dish
-    dishPrice = (id) => {
-        let dishes = this.getFullMenu();
-        let price = dishes.filter(dish => { return dish.id === id })[0].pricePerServing;
-        return price * this.getNumberOfGuests();
+    /**
+   * Get total menu price
+   * @return {Number}
+   */
+  getTotalMenuPrice = () => {
+    let selectedDish = this.getFullMenu();
+    if (selectedDish) {
+        return this.getNumberOfGuests() * parseInt(selectedDish.map(dish => {
+                return dish.pricePerServing;
+            }).reduce((acc, cur) => {
+                return acc + cur;
+            }, 0));
     };
-
+};
 
   processResponse(response) {
     if (response.ok) {

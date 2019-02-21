@@ -34,13 +34,19 @@ class SelectDish extends Component {
     this.setState({query: e.target.value});
   };
 
+
+  renderTitle = () => {
+    return (this.model.getFullMenu().length === 0)?'Find a dish':'Add Another Dish';
+  };
+
+
   render() {
     return (
       <div>
       <Sidebar model={this.props.model} />
         <div className="SelectDish">
-          <h3>Find a Dish</h3>
-          <div className="row">
+          <h3>{this.renderTitle()}</h3>
+          <div className="row full-width">
               <div className="col-lg-3 col-md-6">
                 <input className ="form-control full-width" placeholder="Enter key words" value={this.state.query} onChange={this.handleQuery} />
               </div>

@@ -5,37 +5,46 @@ import { Link } from "react-router-dom";
 class Sidebar extends Component {
     constructor(props) {
         super(props);
+        this.model = props.model;
         this.state = {
-            numberOfGuests: this.props.model.getNumberOfGuests(),
-            menu: this.props.model.getFullMenu()
+            numberOfGuests: this.model.getNumberOfGuests(),
+            menu: this.model.getFullMenu()
         };
-    }
+    };
 
     componentDidMount() {
-        this.props.model.addObserver(this);
-    }
+        this.model.addObserver(this);
+    };
 
     componentWillUnmount() {
-        this.props.model.removeObserver(this);
-    }
+        this.model.removeObserver(this);
+    };
 
     update() {
         this.setState({
-            numberOfGuests: this.props.model.getNumberOfGuests(),
-            menu: this.props.model.getFullMenu()
-       
+            numberOfGuests: this.model.getNumberOfGuests(),
+            menu: this.model.getFullMenu()
         });
-    }
-
-    onNumberOfGuestsChanged = e => {
-        this.props.model.setNumberOfGuests(e.target.value);
     };
 
+    setButton = () => {
+        return (this.state.menu.length === 0)?'active':'';
+    };
 
+    onNumberOfGuestsChanged = e => {
+        this.model.setNumberOfGuests(e.target.value);
+    };
+
+    renderTotalPrice = () => {
+        let total = this.model.getTotalMenuPrice()
+        return (this.model.getFullMenu().length === 0)?'':
+        <div className='total-wrapper'>
+            <span className='totalCost'>{total}</span>
+        </div>
+        
+    };
 
     render() {
-        let menu = null;
-        menu = this.state.menu;
         return (
         <div className="Sidebar">
         
@@ -71,7 +80,7 @@ class Sidebar extends Component {
                                     <span className='totalCost'></span>
                                 </div>
                                 <div>
-                                <Link to="/summary" model={this.props.modelInstance}>
+                                <Link to="/summary" model={this.model}>
                                     <button id ='btn-confirm' className="btn btn-md btn-warning btn-confirm">Confirm Dinner</button>
                                 </Link>
                                 </div>
@@ -108,7 +117,7 @@ class Sidebar extends Component {
                                         this.state.menu.map((menu,i) => (
                                         <tr key={'menu-'+i} className ="dishItem" id ={menu.id}>
                                             <td>{menu.title}</td> 
-                                             <td>{menu.pricePerServing* this.state.numberOfGuests}</td> 
+                                             <td>{this.model.dishPrice(menu.id)}</td> 
 
                                         </tr>
                                       ))
@@ -116,14 +125,11 @@ class Sidebar extends Component {
                                </tbody>
                             </table>
                         </div>
-                        <div className='total-wrapper'>
-                            <span className='totalCost'></span>
-                        </div>
-                         <Link to="/summary" model={this.props.modelInstance}>
+                        {this.renderTotalPrice()}
+                         <Link to="/summary" model={this.model}>
                             <div className='row'>         
-                                    <button id ='btn-confirm' onClick = {() => {this.props.model.getFullMenu()}} className="btn btn-md btn-warning mx-auto col-10 btn-confirm">Confirm
+                                    <button id ='btn-confirm' onClick = {() => {this.model.getFullMenu()}} className="btn btn-md btn-warning mx-auto col-10 btn-confirm" disabled={this.setButton()}>Confirm
                                     Dinner</button>
-                                
                             </div>
                         </Link>
                     </div>
