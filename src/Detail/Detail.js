@@ -18,6 +18,9 @@ class Detail extends Component {
     }
 
     componentDidMount() {
+        this.setState({
+            status: "LOADING",
+        });
         this.model.addObserver(this);
         this.model.getDish()
             .then(dishes => {
@@ -49,38 +52,25 @@ class Detail extends Component {
 
     render() {
         let dish = null;
-        let ingredients = null;
         let price = 1;
+        let ingredients = null;
+        let renderDetail = null;
 
         switch (this.state.status) {
             case 'LOADING':
-                dish = <em>Loading...</em>;
+                 renderDetail = <h3 id='loading' >Loading...</h3>;
                 break;
             case 'LOADED':
                 dish = this.state.dishes;
                 ingredients = dish.extendedIngredients.map(ingredients => (
-
                     <tr key = {ingredients.id}>
-                    <td>{ingredients.amount*this.state.numberOfGuests + ' ' +ingredients.unit} </td>
-                    <td> {ingredients.name} </td>
-                    <td> {price*this.state.numberOfGuests}</td>
-                    <td>SEK</td>
-                </tr>
-
+                        <td>{ingredients.amount*this.state.numberOfGuests + ' ' +ingredients.unit} </td>
+                        <td> {ingredients.name} </td>
+                        <td> {price*this.state.numberOfGuests}</td>
+                        <td>SEK</td>
+                    </tr>
                 ));
-
-                break;
-
-            default:
-                dish = <b>Failed to load data, please try again</b>;
-                break;
-
-        }
-
-        return (
-            <div>
-                <Sidebar model={this.model} />
-                <div className="Detail">
+                renderDetail = 
                     <div id ='detailComponent' className= 'margin'>
                         <div className="row" key ={dish.id}>
 
@@ -92,7 +82,7 @@ class Detail extends Component {
                                     <div className= "padding-top">
                                     
                                     </div>
-                                
+        
                                 </div>
                                 <Link to="/search">
                                     <button id ='backtoSearch' href="#"  className="btn btn-warning" >Back to Search</button>
@@ -115,16 +105,13 @@ class Detail extends Component {
                                                 </table>
                                             </div>
                                         </div>
-                                        {/* <Link to='/search'> */}
                                         <button id ='addToMenu' onClick = {() => this.addToMenuHandler()} href="#" className="btn btn-warning left" >Add to Menu</button>
-                                        {/* </Link> */}
                                     </div>
                                 </div>
                             </div>
                             </div>
                         </div>
-                        
-                            
+
                         <div>
                             <h4>PREPARATION</h4>
                             <div>
@@ -135,11 +122,20 @@ class Detail extends Component {
                                 </div>
                             </div>
                         </div>
-                        </div>
-                        <div>
-                        
-                        </div>
-        
+                    </div>
+
+                break;
+
+            default:
+                renderDetail = <div id='error-search' class="alert alert-danger" role="alert">Cannot retrieve data. Please check your connection.</div>;
+                break;
+        }
+
+        return (
+            <div>
+                <Sidebar model={this.model} />
+                <div className="Detail">
+                {renderDetail}
                 </div>
 
          </div>

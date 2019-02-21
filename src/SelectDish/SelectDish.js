@@ -44,7 +44,7 @@ class SelectDish extends Component {
     return (
       <div>
       <Sidebar model={this.props.model} />
-        <div className="SelectDish">
+        <div className="SelectDish container">
           <h3>{this.renderTitle()}</h3>
           <div className="row full-width">
               <div className="col-lg-3 col-md-6">
@@ -64,8 +64,8 @@ class SelectDish extends Component {
                   <button id='search-btn' type="button" className="btn btn-warning" onClick={this.handleSearch}>Search</button>
                 </div>
             </div>  
-             <Dishes model={this.props.model}/>
           </div>
+             <Dishes model={this.props.model}/>
         </div>
         </div>
     )

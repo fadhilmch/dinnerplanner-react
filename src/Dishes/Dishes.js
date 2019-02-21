@@ -38,22 +38,23 @@ class Dishes extends Component {
     .then(dishes => {
       this.setState({
         status: "LOADED",
-        dishes
+        dishes,
       });
     })
-    .catch(() => {
+    .catch((err) => {
       this.setState({
         status: "ERROR"
       });
     });
   };
 
+
   render() {
     let dishesList = null;
     switch (this.state.status) {
 
       case "LOADING":
-        dishesList = <em>Loading...</em>;
+        dishesList = <h3 id='loading' >Loading...</h3>;
         break;
 
       case "LOADED":
@@ -80,7 +81,7 @@ class Dishes extends Component {
         break;
 
       default:
-        dishesList = <b>Failed to load data, please try again</b>;
+        dishesList = <div id='error-search' class="alert alert-danger" role="alert">Cannot retrieve data. Please check your connection.</div>
         break;
     };
 

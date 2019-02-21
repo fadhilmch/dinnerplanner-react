@@ -142,7 +142,7 @@ class DinnerModel extends ObservableModel {
     let price = dishes.filter(dish => {
       return dish.id === id
     })[0].pricePerServing;
-    return parseInt(price * this.getNumberOfGuests());
+    return parseInt(price * this.getNumberOfGuests(),10);
   };
 
     /**
@@ -163,11 +163,11 @@ class DinnerModel extends ObservableModel {
   getTotalMenuPrice = () => {
     let selectedDish = this.getFullMenu();
     if (selectedDish) {
-        return this.getNumberOfGuests() * parseInt(selectedDish.map(dish => {
+        return parseInt(this.getNumberOfGuests() * selectedDish.map(dish => {
                 return dish.pricePerServing;
             }).reduce((acc, cur) => {
                 return acc + cur;
-            }, 0));
+            }, 0),10);
     };
 };
 
