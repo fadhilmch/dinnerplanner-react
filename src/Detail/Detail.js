@@ -42,6 +42,7 @@ class Detail extends Component {
 
     addToMenuHandler() {
         this.model.addDishToMenu();
+        localStorage.setItem('menu','')
     }
 
      update() {
@@ -49,6 +50,7 @@ class Detail extends Component {
             numberOfGuests: this.model.getNumberOfGuests() 
         });
     }
+
 
     render() {
         let dish = null;

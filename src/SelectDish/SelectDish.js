@@ -39,6 +39,8 @@ class SelectDish extends Component {
     return (this.model.getFullMenu().length === 0)?'Find a dish':'Add Another Dish';
   };
 
+  
+
 
   render() {
     return (

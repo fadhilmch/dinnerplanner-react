@@ -10,7 +10,7 @@ const httpOptions = {
 class DinnerModel extends ObservableModel {
   constructor() {
     super();
-    this._numberOfGuests = 4;
+    this._numberOfGuests = 1;
     this._currentDish = 0;
     this._selectedDish = [];
     this._searchQuery = {
@@ -18,6 +18,8 @@ class DinnerModel extends ObservableModel {
       query: ''
     };
   };
+
+
 
   /**
    * Fetch data based on filter query from the API

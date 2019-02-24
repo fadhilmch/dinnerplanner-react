@@ -20,27 +20,77 @@ class Sidebar extends Component {
         });
     }
 
+    
     componentDidMount() {
+        this.hydrateStateWithLocalStorage();
         this.model.addObserver(this);
+       
     };
 
     componentWillUnmount() {
+        this.saveStateToLocalStorage();
         this.model.removeObserver(this);
     };
 
-    update() {
-        this.setState({
-            numberOfGuests: this.model.getNumberOfGuests(),
-            menu: this.model.getFullMenu()
-        });
-    };
+    // update() {
+    //     this.setState({
+    //         numberOfGuests: this.model.getNumberOfGuests(),
+    //         menu: this.model.getFullMenu()
+    //     });
+        
+    // }
+
+   updateInput(key, value) {
+    // update react state
+    this.setState({ [key]: value });
+
+    // update localStorage
+    localStorage.setItem(key, value);
+    }
+
+
+
+    saveStateToLocalStorage() {
+    // for every item in React state
+    for (let key in this.state) {
+      // save to localStorage
+      localStorage.setItem(key, JSON.stringify(this.state[key]));
+    }
+  }
+
+  hydrateStateWithLocalStorage() {
+    // for all items in state
+    for (let key in this.state) {
+      // if the key exists in localStorage
+      if (localStorage.hasOwnProperty(key)) {
+        // get the key's value from localStorage
+        let value = localStorage.getItem(key);
+
+        // parse the localStorage string and setState
+        try {
+          value = JSON.parse(value);
+          this.setState({ [key]: value });
+        } catch (e) {
+          // handle empty string
+          this.setState({ [key]: value });
+        }
+      }
+    }
+  }
+
+
+
+    onMenuChanged =() => {
+        this.updateInput('menu', this.model.getFullMenu());
+    }
 
     setButton = () => {
         return (this.state.menu.length === 0)?'active':'';
     };
 
     onNumberOfGuestsChanged = e => {
-        this.model.setNumberOfGuests(e.target.value);
+        this.updateInput('numberOfGuests', e.target.value);
+        //this.model.setNumberOfGuests(e.target.value);
     };
 
     renderTotalPrice = () => {
