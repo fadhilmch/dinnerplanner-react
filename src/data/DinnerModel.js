@@ -11,7 +11,8 @@ class DinnerModel extends ObservableModel {
   constructor() {
     super();
     this._numberOfGuests = 1;
-    this._currentDish = 0;
+    this._currentDishId = 0;
+    this._currentDish = {};
     this._selectedDish = [];
     this._searchQuery = {
       type: 'all',
@@ -68,8 +69,8 @@ class DinnerModel extends ObservableModel {
   };
 
   /**
-   * Set dishes fetched from API
-   * @param {Array} dish
+   * Get Search Query Value
+   * @return {Object} 
    */
   getSearchQuery = () => {
     return {
@@ -82,15 +83,15 @@ class DinnerModel extends ObservableModel {
    * @return {Number}
    */
   getCurrentDish() {
-    return this._currentDish;
+    return this._currentDishId;
   };
 
     /**
    * Set current dish id
-   * @param {Number} dish
+   * @param {Number} id
    */
   setCurrentDish(id) {
-    this._currentDish = id;
+    this._currentDishId = id;
     this.notifyObservers();
   }
 
@@ -113,17 +114,16 @@ class DinnerModel extends ObservableModel {
 
     /**
    * Add dish to mmenu
-   * @param {number} id
+   * @param {Object} dish
    */
-  addDishToMenu() {
+  addDishToMenu(dish = this._currentDish) {
     let dishTemp = this._selectedDish;
-    this.getDish().then(dish => {
-      if (dishTemp.map(dish => dish.id).indexOf(dish.id) === -1)
-      {
-        dishTemp.push(dish);
-        this.notifyObservers();
-      };
-    });
+    if (dishTemp.map(_dish => _dish.id).indexOf(dish.id) === -1)
+    {
+      dishTemp.push(dish);
+      this.notifyObservers();
+      this._selectedDish = dishTemp;
+    };
   };
 
     /**
@@ -152,9 +152,13 @@ class DinnerModel extends ObservableModel {
    * @param {Number} id
    * @return {Object}
    */
-  getDish() {
-    const url = `${BASE_URL}recipes/` + this._currentDish + '/information?includeNutrition=false';
-    return fetch(url, httpOptions).then(this.processResponse);
+  getDish(id = this._currentDishId) {
+    const url = `${BASE_URL}recipes/` + id + '/information?includeNutrition=false';
+    return fetch(url, httpOptions).then(response => response.json()).then(data => {
+      this._currentDish = data;
+      console.log(data)
+      return data;
+    });
   }
 
 

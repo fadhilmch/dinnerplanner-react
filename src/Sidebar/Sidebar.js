@@ -22,66 +22,41 @@ class Sidebar extends Component {
 
     
     componentDidMount() {
-        this.hydrateStateWithLocalStorage();
         this.model.addObserver(this);
+        this.checkLocalStorage();
        
     };
 
     componentWillUnmount() {
-        this.saveStateToLocalStorage();
+        localStorage.setItem('menu', JSON.stringify(this.model.getFullMenu()));
+        localStorage.setItem('numberOfGuests', this.model.getNumberOfGuests());
         this.model.removeObserver(this);
     };
 
-    // update() {
-    //     this.setState({
-    //         numberOfGuests: this.model.getNumberOfGuests(),
-    //         menu: this.model.getFullMenu()
-    //     });
-        
-    // }
-
-   updateInput(key, value) {
-    // update react state
-    this.setState({ [key]: value });
-
-    // update localStorage
-    localStorage.setItem(key, value);
+    update() {
+        this.setState({
+            numberOfGuests: this.model.getNumberOfGuests(),
+            menu: this.model.getFullMenu()
+        });
     }
 
-
-
-    saveStateToLocalStorage() {
-    // for every item in React state
-    for (let key in this.state) {
-      // save to localStorage
-      localStorage.setItem(key, JSON.stringify(this.state[key]));
-    }
-  }
-
-  hydrateStateWithLocalStorage() {
-    // for all items in state
-    for (let key in this.state) {
-      // if the key exists in localStorage
-      if (localStorage.hasOwnProperty(key)) {
-        // get the key's value from localStorage
-        let value = localStorage.getItem(key);
-
-        // parse the localStorage string and setState
-        try {
-          value = JSON.parse(value);
-          this.setState({ [key]: value });
-        } catch (e) {
-          // handle empty string
-          this.setState({ [key]: value });
+    checkLocalStorage = () => {
+        if(localStorage.hasOwnProperty('numberOfGuests')){
+            let value = Number(localStorage.getItem('numberOfGuests'));
+            this.setState({numberOfGuests: value});
+            this.model.setNumberOfGuests(value);
         }
-      }
-    }
-  }
-
-
-
-    onMenuChanged =() => {
-        this.updateInput('menu', this.model.getFullMenu());
+        if(localStorage.hasOwnProperty('menu')){
+            let value = (localStorage.getItem('menu'));
+            if(value.length!==0){
+                value = JSON.parse(value);
+                value.forEach(menu => {
+                    this.model.addDishToMenu(menu);
+                });
+                this.setState({menu: value});
+            }
+        }
+  
     }
 
     setButton = () => {
@@ -89,8 +64,7 @@ class Sidebar extends Component {
     };
 
     onNumberOfGuestsChanged = e => {
-        this.updateInput('numberOfGuests', e.target.value);
-        //this.model.setNumberOfGuests(e.target.value);
+        this.model.setNumberOfGuests(e.target.value);
     };
 
     renderTotalPrice = () => {
